@@ -10,6 +10,7 @@ class App extends Component{
       // "phrase" is the text entered by the user - right now there are test words hard coded to make the process of testing your code faster and easier
       // ACTION ITEM: when you are ready for your full user experience, delete the test words so phrase is assigned an empty string
       phrase: "alpha through yummy squeal queen fry",
+      // alphayay oughthray ummyyay uealsqay eenquay yfray
       // "phraseTranslated" is what the user will see appear on the page as Pig Latin, it starts as the preset message and updates when your user clicks the "submit" button
       phraseTranslated: "This is where your translated sentence will appear."
     }
@@ -33,13 +34,85 @@ class App extends Component{
       })
       console.log("vowelsArray:", vowelsArray)
 
-      // your code here!
+      // Must handle:
+      // 1. word starts with a consonant or group of consonants -> move consonants, add "ay"
+      //       a. word starts with qu -> move "qu", add "ay"
+      //       b. no vowels, has y
+      // 2. word starts with a vowel -> add "way"
+
+      // algorithm:
+      // if word starts with consonant
+      //      - handle qu: if first vowel found starts with u, look at the consonant
+      //        before it. is it a q?
+      //        if it's a q, then skip u and split at next letter.
+      //        otherwise, split at first vowel.
+      //      - no vowels, just y in there, then get substring up to y and move to back
+      // if word starts with a vowel, add "way"
+
+      let firstLetter = currentWord[0]
+      let translatedWord = ""
+
+      // word starts with a vowel
+      if (firstLetter === "a" || firstLetter === "e" || firstLetter === "i" ||    firstLetter === "o" || firstLetter === "u") {
+        translatedWord = currentWord + "way"
+      } else {
+        // word starts with consonant(s)
+        let front = ""
+        let back = ""
+    
+        if (vowelsArray.length === 0) { // when y is a vowel
+            // no vowels, pretty sure it has a y
+            let indexOfy = currentWord.indexOf('y')
+            front = currentWord.substring(0, indexOfy)
+            back = "y"
+        } else {  // word has vowels
+            
+            // word has vowels
+
+              // word has qu in the first syllable. find the second vowel
+              // is the first vowel u?
+              // u - look to see if there's q in front of the u
+              //      if q, then split at second vowel in vowelsArray
+              //      if not q, then just split at the u
+              // queen, squeal
+              // qu + een, squ + eal
+              // pull -> p + ull
+
+            // find index of first vowel
+            let indexOfFirstVowel = currentWord.indexOf(vowelsArray[0])
+
+            if (vowelsArray[0] === 'u') {
+                // vowel is a u. look at the letter before it to see if it's a "qu" syllable
+                
+                let letterBeforeU = currentWord.charAt(indexOfFirstVowel-1) 
+                
+                if (letterBeforeU === 'q') {
+                  // TODO: handle qu
+                } else {
+                    // split up the word on the first vowel found. repetitive
+                    front = currentWord.substring(0, indexOfFirstVowel)
+                    back = currentWord.substring(indexOfFirstVowel)    
+                }
+            } else {            
+                // split up the word on the first vowel found
+                front = currentWord.substring(0, indexOfFirstVowel)
+                back = currentWord.substring(indexOfFirstVowel)
+            }
+
+        }
+        
+        translatedWord = back + front + "ay" 
+    
+      }
+      console.log(translatedWord)
+
+      // phrase: "alpha through yummy squeal queen fry",
+      // alphayay oughthray ummyyay uealsqay eenquay yfray
 
       // Remember: console.log is your friend :)
 
-
       // ACTION ITEM: change the value of currentWord to the name of whatever variable you made containing your Pig Latin'd word
-      return currentWord
+      return translatedWord
     })
 
 
@@ -99,7 +172,7 @@ class App extends Component{
           <button onClick={this.restartGame}>Clear</button>
         </div>
         <p>{this.state.phraseTranslated}</p>
-        <footer>Coded by ~your name here~</footer>
+        <footer>Coded by Jared and Lauralyn</footer>
       </>
     )
   }
