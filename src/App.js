@@ -49,24 +49,24 @@ class App extends Component{
       //      - no vowels, just y in there, then get substring up to y and move to back
       // if word starts with a vowel, add "way"
 
+
+
       let firstLetter = currentWord[0]
       let translatedWord = ""
+      let front = ""
+      let back  = ""
 
       // word starts with a vowel
       if (firstLetter === "a" || firstLetter === "e" || firstLetter === "i" ||    firstLetter === "o" || firstLetter === "u") {
         translatedWord = currentWord + "way"
-      } else {
-        // word starts with consonant(s)
-        let front = ""
-        let back = ""
-    
-        if (vowelsArray.length === 0) { // when y is a vowel
+      } else if (vowelsArray.length === 0) { // when y is a vowel
             // no vowels, pretty sure it has a y
             let indexOfy = currentWord.indexOf('y')
             front = currentWord.substring(0, indexOfy)
             back = "y"
+            translatedWord = back + front + "ay"
         } else {  // word has vowels
-            
+
             // word has vowels
 
               // word has qu in the first syllable. find the second vowel
@@ -83,26 +83,45 @@ class App extends Component{
 
             if (vowelsArray[0] === 'u') {
                 // vowel is a u. look at the letter before it to see if it's a "qu" syllable
-                
-                let letterBeforeU = currentWord.charAt(indexOfFirstVowel-1) 
-                
+
+                let letterBeforeU = currentWord.charAt(indexOfFirstVowel-1)
+
                 if (letterBeforeU === 'q') {
-                  // TODO: handle qu
+
+
+                  let indexOfNextVowel = currentWord.indexOf(vowelsArray[1])
+
+                  front = currentWord.substring(0,indexOfNextVowel)
+                  back = currentWord.substring(indexOfNextVowel)
+
+            // group and look at 1st vowel
+            // in vowels array
+            // 0th index is a U
+            // next vowel is an index
+            // Ex. Queen = u e e
+            // start at 1st index
+            // vowelsArray[1] = "e"^
+            // substring (0,1)
+            // currentWord.indexOf(vowelsArray[1]
+            // substring (1)
+            // qu een
+            // Expecting = een + qu + ay
+
+
                 } else {
                     // split up the word on the first vowel found. repetitive
                     front = currentWord.substring(0, indexOfFirstVowel)
-                    back = currentWord.substring(indexOfFirstVowel)    
+                    back = currentWord.substring(indexOfFirstVowel)
                 }
-            } else {            
+            } else {
                 // split up the word on the first vowel found
                 front = currentWord.substring(0, indexOfFirstVowel)
                 back = currentWord.substring(indexOfFirstVowel)
             }
-
         }
-        
-        translatedWord = back + front + "ay" 
-    
+
+        translatedWord = back + front + "ay"
+
       }
       console.log(translatedWord)
 
