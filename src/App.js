@@ -9,19 +9,30 @@ class App extends Component{
     this.state = {
       // "phrase" is the text entered by the user - right now there are test words hard coded to make the process of testing your code faster and easier
       // ACTION ITEM: when you are ready for your full user experience, delete the test words so phrase is assigned an empty string
-      phrase: "alpha through yummy squeal queen fry",
+      phrase: "alpha through yummy squeal queen fry!",
       // alphayay oughthray ummyyay uealsqay eenquay yfray
       // "phraseTranslated" is what the user will see appear on the page as Pig Latin, it starts as the preset message and updates when your user clicks the "submit" button
       phraseTranslated: "This is where your translated sentence will appear."
     }
   }
-
+// let userInput = this.state.phrase.split(" ")
   // The "myPigLatinCodeHere" function is where you will put your logic to convert the sentence entered by the user to Pig Latin
 
   myPigLatinCodeHere = () => {
+    let phrase = this.state.phrase
+    const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g
+    console.log(phrase.charAt(phrase.length-1))
+    let punctuation = ""
+    // used regex to identify symbols at the end of the phrase
+    //
+    if (phrase.charAt(phrase.length-1).match(regex)) {
+        punctuation = phrase.charAt(phrase.length-1)
+    } else {
+      console.log("no regex")
+    }
     // the variable "userInput" will contain the text input from the user modified into an array of words
     // no need to change this variable
-    let userInput = this.state.phrase.split(" ")
+    let userInput = phrase.split(" ")
     console.log("userInput:", userInput)
 
     // now that we have an array of words, we can map over the array and access each word
@@ -61,7 +72,7 @@ class App extends Component{
         // no vowels, pretty sure it has a y so treat y as the vowel
         let indexOfy = currentWord.indexOf('y')
         front = currentWord.substring(0, indexOfy)
-        back = "y"
+        back = currentWord.substring(indexOfy) 
         translatedWord = back + front + "ay"
       } else {
         // word is a consonant and has vowels
@@ -109,10 +120,16 @@ class App extends Component{
       return translatedWord
     })
 
+    // Check if phrase has punctuation at end
+    // if the phrase has punctuation at the end,  cut off punctuation and save it as a variable/
+    // at the end, concatenate the punctuation.
+    // if else for the front
+
+
 
     // joining the array back to a string of translated words
     // no need to change this variable
-    let translatedWords = translatedWordsArray.join(" ")
+    let translatedWords = translatedWordsArray.join(" ") + punctuation
     console.log("translatedWords:", translatedWords)
 
     // the setState method will take your information from "translatedWords" and update the state object that is displayed to the user
